@@ -1,12 +1,13 @@
 import express, { Response, NextFunction, Request } from 'express';
 import logger from './config/logger';
 import { HttpError } from 'http-errors';
-
+import AuthRoutes from './routes/AuthRoutes';
 const app = express();
 
 app.get('/', (req, res) => {
     res.status(200).send('Hello World!');
 });
+app.use('/auth', AuthRoutes);
 
 // Global error handler
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
