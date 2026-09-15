@@ -116,14 +116,14 @@ npm run dev
 
 ## 📜 Available Scripts
 
-| Command | Description |
-|----------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Compile TypeScript |
-| `npm start` | Run production build |
-| `npm run test` | Run tests |
-| `npm run lint:check` | Run ESLint |
-| `npm run lint:fix` | Fix lint issues |
+| Command              | Description               |
+| -------------------- | ------------------------- |
+| `npm run dev`        | Start development server  |
+| `npm run build`      | Compile TypeScript        |
+| `npm start`          | Run production build      |
+| `npm run test`       | Run tests                 |
+| `npm run lint:check` | Run ESLint                |
+| `npm run lint:fix`   | Fix lint issues           |
 | `npm run format:fix` | Format code with Prettier |
 
 ---
