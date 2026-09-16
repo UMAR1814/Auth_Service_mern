@@ -1,64 +1,64 @@
 {
-   "name": "authservice-mern",
-   "version": "1.0.0",
-   "description": "Auth Service",
-   "homepage": "https://github.com/mukaramawan/authservice-mern#readme",
-   "bugs": {
-      "url": "https://github.com/mukaramawan/authservice-mern/issues"
-   },
-   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/mukaramawan/authservice-mern.git"
-   },
-   "license": "ISC",
-   "author": "",
-   "type": "module",
-   "main": "index.js",
-   "scripts": {
-      "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
-      "format:check": "npx prettier . --check",
-      "format:fix": "npx prettier . --write",
-      "lint:check": "eslint .",
-      "lint:fix": "eslint . --fix",
-      "test": "jest --watch --runInBand",
-      "prepare": "husky",
-      "start": "ts-node src/index.ts",
-      "typeorm": "typeorm-ts-node-commonjs"
-   },
-   "devDependencies": {
-      "@eslint/js": "^10.0.1",
-      "@types/express": "^5.0.6",
-      "@types/http-errors": "^2.0.5",
-      "@types/jest": "^30.0.0",
-      "@types/node": "^26.6.1",
-      "@types/supertest": "^7.2.1",
-      "@types/winston": "^2.4.4",
-      "cross-env": "^10.1.0",
-      "eslint": "^10.8.0",
-      "husky": "^9.1.7",
-      "jest": "^30.4.2",
-      "lint-staged": "^17.2.0",
-      "nodemon": "^3.1.14",
-      "prettier": "3.9.6",
-      "supertest": "^7.2.2",
-      "ts-jest": "^29.4.12",
-      "ts-node": "^10.9.2",
-      "typescript": "^5.9.3",
-      "typescript-eslint": "^8.65.0"
-   },
-   "lint-staged": {
-      "*ts": [
-         "npm run format:fix",
-         "npm run lint:fix"
-      ]
-   },
-   "dependencies": {
-      "dotenv": "^17.4.2",
-      "express": "^5.2.1",
-      "http-errors": "^2.0.1",
-      "pg-query-stream": "^4.17.0",
-      "reflect-metadata": "^0.2.2",
-      "typeorm": "1.1.1",
-      "winston": "^3.19.0"
-   }
+    "name": "authservice-mern",
+    "version": "1.0.0",
+    "description": "Auth Service",
+    "homepage": "https://github.com/mukaramawan/authservice-mern#readme",
+    "bugs": {
+        "url": "https://github.com/mukaramawan/authservice-mern/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mukaramawan/authservice-mern.git"
+    },
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
+        "format:check": "npx prettier . --check",
+        "format:fix": "npx prettier . --write",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "test": "jest --watch --runInBand",
+        "prepare": "husky",
+        "start": "ts-node src/index.ts",
+        "typeorm": "typeorm-ts-node-commonjs"
+    },
+    "devDependencies": {
+        "@eslint/js": "^10.0.1",
+        "@types/express": "^5.0.6",
+        "@types/http-errors": "^2.0.5",
+        "@types/jest": "^30.0.0",
+        "@types/node": "^26.6.1",
+        "@types/supertest": "^7.2.1",
+        "@types/winston": "^2.4.4",
+        "cross-env": "^10.1.0",
+        "eslint": "^10.8.0",
+        "husky": "^9.1.7",
+        "jest": "^30.4.2",
+        "lint-staged": "^17.2.0",
+        "nodemon": "^3.1.14",
+        "prettier": "3.9.6",
+        "supertest": "^7.2.2",
+        "ts-jest": "^29.4.12",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.65.0"
+    },
+    "lint-staged": {
+        "*ts": [
+            "npm run format:fix",
+            "npm run lint:fix"
+        ]
+    },
+    "dependencies": {
+        "dotenv": "^17.4.2",
+        "express": "^5.2.1",
+        "http-errors": "^2.0.1",
+        "pg-query-stream": "^4.17.0",
+        "reflect-metadata": "^0.2.2",
+        "typeorm": "1.1.1",
+        "winston": "^3.19.0"
+    }
 }
