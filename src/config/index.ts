@@ -1,10 +1,19 @@
 import { config } from 'dotenv';
+import path from 'path';
 
-config();
+config({
+    path: path.resolve(__dirname, `../../.env.${process.env.NODE_ENV}`),
+});
 
-const { PORT, NODE_ENV } = process.env;
+const { PORT, NODE_ENV, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD } =
+    process.env;
 
 export const Config = {
     PORT,
     NODE_ENV,
+    DB_HOST,
+    DB_PORT,
+    DB_NAME,
+    DB_USER,
+    DB_PASSWORD,
 };
