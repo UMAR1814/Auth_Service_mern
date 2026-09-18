@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
 import { User } from '../entities/User';
+import { Roles } from '../constants';
 
 export class UserServices {
     constructor(private userRepository: Repository<User>) {}
@@ -9,6 +10,7 @@ export class UserServices {
                 username,
                 email,
                 password,
+                role: Roles.CUSTOMER,
             });
             return user;
         } catch (error) {

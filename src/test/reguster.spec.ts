@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../app';
 import { AppDataSource } from '../config/data-source';
 import { DataSource } from 'typeorm';
-import { truncateTable } from './utils';
+import { Roles } from '../constants';
 
 type RegisterResponse = {
     id: number;
@@ -20,7 +20,8 @@ describe('POST /auth/register', () => {
     });
 
     beforeEach(async () => {
-        await truncateTable(connection);
+        await connection.dropDatabase();
+        await connection.synchronize();
     });
 
     describe('all the fields are valid', () => {
@@ -77,5 +78,20 @@ describe('POST /auth/register', () => {
         });
 
         describe('Fields are missing', () => {});
+    });
+
+    it('should assign a customer role to the user', async () => {
+        const user = {
+            username: 'testuser',
+            email: 'testuser@example.com',
+            password: 'password123',
+        };
+
+        await request(app).post('/auth/register').send(user);
+
+        const userRepository = connection.getRepository('User');
+        const users = await userRepository.find();
+        expect(users[0]).toHaveProperty('role');
+        expect(users[0].role).toBe(Roles.CUSTOMER);
     });
 });
