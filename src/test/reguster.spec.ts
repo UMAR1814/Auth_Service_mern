@@ -71,8 +71,6 @@ describe('POST /auth/register', () => {
                 .post('/auth/register')
                 .send(user);
 
-            console.log('Response:', response.body);
-
             const body = response.body as RegisterResponse;
 
             expect(body.id).toBeDefined();

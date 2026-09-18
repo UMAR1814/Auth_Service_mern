@@ -4,11 +4,15 @@ import { User } from '../entities/User';
 export class UserServices {
     constructor(private userRepository: Repository<User>) {}
     async create({ username, email, password }: Omit<User, 'id'>) {
-        const user = await this.userRepository.save({
-            username,
-            email,
-            password,
-        });
-        return user;
+        try {
+            const user = await this.userRepository.save({
+                username,
+                email,
+                password,
+            });
+            return user;
+        } catch (error) {
+            throw new Error({ message: 'Error creating user', cause: error });
+        }
     }
 }
