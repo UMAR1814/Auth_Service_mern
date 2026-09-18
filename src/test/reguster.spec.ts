@@ -4,6 +4,10 @@ import { AppDataSource } from '../config/data-source';
 import { DataSource } from 'typeorm';
 import { truncateTable } from './utils';
 
+type RegisterResponse = {
+    id: number;
+};
+
 describe('POST /auth/register', () => {
     let connection: DataSource;
 
@@ -55,6 +59,23 @@ describe('POST /auth/register', () => {
             expect(users[0].username).toBe(user.username);
             expect(users[0].email).toBe(user.email);
             expect(users[0].password).toBe(user.password);
+        });
+        it('should return id of the registered user', async () => {
+            const user = {
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password123',
+            };
+
+            const response = await request(app)
+                .post('/auth/register')
+                .send(user);
+
+            console.log('Response:', response.body);
+
+            const body = response.body as RegisterResponse;
+
+            expect(body.id).toBeDefined();
         });
 
         describe('Fields are missing', () => {});
