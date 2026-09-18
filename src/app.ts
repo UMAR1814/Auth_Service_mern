@@ -4,6 +4,7 @@ import logger from './config/logger';
 import { HttpError } from 'http-errors';
 import AuthRoutes from './routes/AuthRoutes';
 const app = express();
+app.use(express.json());
 
 app.get('/', (req, res) => {
     res.status(200).send('Hello World!');

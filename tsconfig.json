@@ -29,7 +29,10 @@
         // "noPropertyAccessFromIndexSignature": true,
         // Recommended Options
         "strict": true,
+        "strictPropertyInitialization": false,
         "jsx": "react-jsx",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "verbatimModuleSyntax": false, // Make it flase
         "esModuleInterop": true, // <--- Add this flag
         "isolatedModules": true,

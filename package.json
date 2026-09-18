@@ -2,17 +2,17 @@
     "name": "authservice-mern",
     "version": "1.0.0",
     "description": "Auth Service",
-    "homepage": "https://github.com/mukaramawan/authservice-mern#readme",
+    "homepage": "https://github.com/ameerumar/authservice-mern#readme",
     "bugs": {
-        "url": "https://github.com/mukaramawan/authservice-mern/issues"
+        "url": "https://github.com/ameerumar/authservice-mern/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/mukaramawan/authservice-mern.git"
+        "url": "git+https://github.com/ameerumar/authservice-mern.git"
     },
     "license": "ISC",
     "author": "",
-    "type": "module",
+    "type": "commonjs",
     "main": "index.js",
     "scripts": {
         "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
