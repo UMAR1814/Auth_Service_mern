@@ -3,7 +3,7 @@ import { User } from '../entities/User';
 
 export class UserServices {
     constructor(private userRepository: Repository<User>) {}
-    async create({ username, email, password }: User) {
+    async create({ username, email, password }: Omit<User, 'id'>) {
         const user = await this.userRepository.save({
             username,
             email,
