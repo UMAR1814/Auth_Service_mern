@@ -60,6 +60,7 @@ describe('POST /auth/register', () => {
             expect(users[0].username).toBe(user.username);
             expect(users[0].email).toBe(user.email);
         });
+
         it('should return id of the registered user', async () => {
             const user = {
                 username: 'testuser',
@@ -76,50 +77,64 @@ describe('POST /auth/register', () => {
             expect(body.id).toBeDefined();
         });
 
-        describe('Fields are missing', () => {});
+        it('should assign a customer role to the user', async () => {
+            const user = {
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password123',
+            };
+
+            await request(app).post('/auth/register').send(user);
+
+            const userRepository = connection.getRepository('User');
+            const users = await userRepository.find();
+            expect(users[0]).toHaveProperty('role');
+            expect(users[0].role).toBe(Roles.CUSTOMER);
+        });
+
+        it('Password should be hashed', async () => {
+            const user = {
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password123',
+            };
+
+            await request(app).post('/auth/register').send(user);
+
+            const userRepository = connection.getRepository('User');
+            const users = await userRepository.find();
+            expect(users[0].password).not.toBe(user.password);
+            expect(users[0].password).toHaveLength(60);
+            expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
+        });
+
+        it('should return a 400 error when a user tries to register with an existing email', async () => {
+            const user = {
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password123',
+            };
+
+            const userRepository = connection.getRepository('User');
+            await userRepository.save({ ...user, role: Roles.CUSTOMER });
+            const response = await request(app)
+                .post('/auth/register')
+                .send(user);
+            expect(response.statusCode).toBe(400);
+        });
     });
 
-    it('should assign a customer role to the user', async () => {
-        const user = {
-            username: 'testuser',
-            email: 'testuser@example.com',
-            password: 'password123',
-        };
-
-        await request(app).post('/auth/register').send(user);
-
-        const userRepository = connection.getRepository('User');
-        const users = await userRepository.find();
-        expect(users[0]).toHaveProperty('role');
-        expect(users[0].role).toBe(Roles.CUSTOMER);
-    });
-
-    it('Password should be hashed', async () => {
-        const user = {
-            username: 'testuser',
-            email: 'testuser@example.com',
-            password: 'password123',
-        };
-
-        await request(app).post('/auth/register').send(user);
-
-        const userRepository = connection.getRepository('User');
-        const users = await userRepository.find();
-        expect(users[0].password).not.toBe(user.password);
-        expect(users[0].password).toHaveLength(60);
-        expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
-    });
-
-    it('should return a 400 error when a user tries to register with an existing email', async () => {
-        const user = {
-            username: 'testuser',
-            email: 'testuser@example.com',
-            password: 'password123',
-        };
-
-        const userRepository = connection.getRepository('User');
-        await userRepository.save({ ...user, role: Roles.CUSTOMER });
-        const response = await request(app).post('/auth/register').send(user);
-        expect(response.statusCode).toBe(400);
+    describe('Fields are missing', () => {
+        it('should return 400 when email is missing', async () => {
+            const user = {
+                username: 'testuser',
+                email: '',
+                password: 'password123',
+            };
+            const response = await request(app)
+                .post('/auth/register')
+                .send(user);
+            expect(response.statusCode).toBe(400);
+        });
     });
 });
