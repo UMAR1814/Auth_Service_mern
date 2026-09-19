@@ -109,4 +109,17 @@ describe('POST /auth/register', () => {
         expect(users[0].password).toHaveLength(60);
         expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
     });
+
+    it('should return a 400 error when a user tries to register with an existing email', async () => {
+        const user = {
+            username: 'testuser',
+            email: 'testuser@example.com',
+            password: 'password123',
+        };
+
+        const userRepository = connection.getRepository('User');
+        await userRepository.save({ ...user, role: Roles.CUSTOMER });
+        const response = await request(app).post('/auth/register').send(user);
+        expect(response.statusCode).toBe(400);
+    });
 });
