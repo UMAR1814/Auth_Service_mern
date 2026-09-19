@@ -23,7 +23,7 @@ Docker is a powerful tool that allows you to develop, ship, and run applications
 4. Run the PostgreSQL container with the volume attached 🏃:
 
     ```bash
-    docker run --name some-postgres -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v pgdata:/var/lib/postgresql/data -p 5432:5432 -d postgres
+    docker run --name mernpg -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -v pgdata:/var/lib/postgresql -p 5432:5432 -d postgres
     ```
 
     This command does the following:

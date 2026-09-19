@@ -57,8 +57,8 @@ describe('POST /auth/register', () => {
             const userRepository = connection.getRepository('User');
             const users = await userRepository.find();
             expect(users.length).toBe(1);
-            expect(users[0].username).toBe(user.username);
-            expect(users[0].email).toBe(user.email);
+            expect(users[0]?.username).toBe(user.username);
+            expect(users[0]?.email).toBe(user.email);
         });
 
         it('should return id of the registered user', async () => {
@@ -89,7 +89,7 @@ describe('POST /auth/register', () => {
             const userRepository = connection.getRepository('User');
             const users = await userRepository.find();
             expect(users[0]).toHaveProperty('role');
-            expect(users[0].role).toBe(Roles.CUSTOMER);
+            expect(users[0]?.role).toBe(Roles.CUSTOMER);
         });
 
         it('Password should be hashed', async () => {
@@ -135,6 +135,9 @@ describe('POST /auth/register', () => {
                 .post('/auth/register')
                 .send(user);
             expect(response.statusCode).toBe(400);
+            const userRepository = connection.getRepository('User');
+            const users = await userRepository.find();
+            expect(users).toHaveLength(0);
         });
     });
 });

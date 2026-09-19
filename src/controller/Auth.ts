@@ -3,7 +3,7 @@ import { RegisterUserRequest } from '../types';
 import { UserServices } from '../services/UserServices';
 import { NextFunction } from 'express';
 import { Logger } from 'winston';
-import createHttpError from 'http-errors';
+import { validationResult } from 'express-validator';
 
 export class AuthController {
     userServices: UserServices;
@@ -18,13 +18,14 @@ export class AuthController {
         req: RegisterUserRequest,
         res: Response,
         next: NextFunction,
-    ) {
-        const { username, email, password } = req.body;
-        if (!email) {
-            const err = createHttpError(400, 'Email is required');
-            next(err);
+    ): Promise<void> {
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            res.status(400).json({ errors: result.array() });
             return;
         }
+
+        const { username, email, password } = req.body;
 
         this.logger.info(`Registering user: ${username}`);
         try {
