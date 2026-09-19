@@ -5,10 +5,13 @@ import { NextFunction } from 'express';
 import { Logger } from 'winston';
 
 export class AuthController {
+    userServices: UserServices;
     constructor(
-        private userServices: UserServices,
+        userServices: UserServices,
         private logger: Logger,
-    ) {}
+    ) {
+        this.userServices = userServices;
+    }
 
     async register(
         req: RegisterUserRequest,
