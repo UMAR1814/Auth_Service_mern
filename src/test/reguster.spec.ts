@@ -3,6 +3,7 @@ import app from '../app';
 import { AppDataSource } from '../config/data-source';
 import { DataSource } from 'typeorm';
 import { Roles } from '../constants';
+import { isJWT } from './utils';
 
 type RegisterResponse = {
     id: number;
@@ -168,6 +169,39 @@ describe('POST /auth/register', () => {
                 .post('/auth/register')
                 .send(user);
             expect(response.statusCode).toBe(400);
+        });
+    });
+
+    describe('Return tokens', () => {
+        it('should return access token and refresh token in the response cookies', async () => {
+            const user = {
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password123',
+            };
+
+            const response = await request(app)
+                .post('/auth/register')
+                .send(user);
+
+            const cookies = response.headers['set-cookie'] || [];
+
+            let accessTokenCookie: string | null = null;
+            let refreshTokenCookie: string | null = null;
+
+            for (const cookie of cookies) {
+                if (cookie.startsWith('accessToken=')) {
+                    accessTokenCookie = cookie.split(';')[0].split('=')[1];
+                }
+
+                if (cookie.startsWith('refreshToken=')) {
+                    refreshTokenCookie = cookie.split(';')[0].split('=')[1];
+                }
+            }
+            expect(accessTokenCookie).not.toBeNull();
+            expect(refreshTokenCookie).not.toBeNull();
+            expect(isJWT(accessTokenCookie)).toBeTruthy();
+            // expect(isJWT(refreshTokenCookie)).toBeTruthy();
         });
     });
 });
