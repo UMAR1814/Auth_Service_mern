@@ -34,19 +34,13 @@ crypto.generateKeyPair(
         }
 
         // Save private key
-        fs.writeFileSync(
-            path.join(certsDir, 'private.pem'),
-            privateKey
-        );
+        fs.writeFileSync(path.join(certsDir, 'private.pem'), privateKey);
 
         // Save public key
-        fs.writeFileSync(
-            path.join(certsDir, 'public.pem'),
-            publicKey
-        );
+        fs.writeFileSync(path.join(certsDir, 'public.pem'), publicKey);
 
         console.log('Keys generated successfully!');
         console.log(`Private key: ${path.join(certsDir, 'private.pem')}`);
         console.log(`Public key: ${path.join(certsDir, 'public.pem')}`);
-    }
+    },
 );
