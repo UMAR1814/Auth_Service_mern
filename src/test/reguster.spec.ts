@@ -140,4 +140,34 @@ describe('POST /auth/register', () => {
             expect(users).toHaveLength(0);
         });
     });
+
+    describe('All fields are given but structure is not correct', () => {
+        it('Should trim the email and make it correct', async () => {
+            const user = {
+                username: 'testuser',
+                email: ' testuser@example.com ',
+                password: 'password123',
+            };
+            const response = await request(app)
+                .post('/auth/register')
+                .send(user);
+            expect(response.statusCode).toBe(201);
+            const userRepository = connection.getRepository('User');
+            const users = await userRepository.find();
+            expect(users).toHaveLength(1);
+            expect(users[0].email).toBe('testuser@example.com');
+        });
+
+        it('Should check email is is valid email', async () => {
+            const user = {
+                username: 'testuser',
+                email: 'invalidemail',
+                password: 'password123',
+            };
+            const response = await request(app)
+                .post('/auth/register')
+                .send(user);
+            expect(response.statusCode).toBe(400);
+        });
+    });
 });
