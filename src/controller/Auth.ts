@@ -1,12 +1,14 @@
+import fs from 'fs';
 import { Response } from 'express';
+import { JwtPayload, sign } from 'jsonwebtoken';
 import { RegisterUserRequest } from '../types';
 import { UserServices } from '../services/UserServices';
 import { NextFunction } from 'express';
 import { Logger } from 'winston';
 import { validationResult } from 'express-validator';
-import jwt from 'jsonwebtoken';
-import fs from 'fs';
 import path from 'path';
+import { Config } from '../config';
+import createHTTPError from 'http-errors';
 
 export class AuthController {
     userServices: UserServices;
@@ -38,35 +40,45 @@ export class AuthController {
                 password,
             });
             this.logger.info(`User registered successfully: ${user.username}`);
-            res.cookie('accessToken', user.accessToken, {
-                httpOnly: true,
-                secure: false,
-            });
-            const privateKey = fs.readFileSync(
-                path.join(process.cwd(), 'certs', 'private.pem'),
-                'utf8',
-            );
 
-            const accessToken = jwt.sign(
-                {
-                    id: user.id,
-                    role: user.role,
-                    assignedBy: 'auth-service',
-                },
-                privateKey,
-                {
-                    algorithm: 'RS256',
-                    expiresIn: '1h',
-                },
-            );
+            let privateKeyPath: Buffer;
+            try {
+                privateKeyPath = fs.readFileSync(
+                    path.join(__dirname, '../../certs/private.pem'),
+                );
+            } catch (error) {
+                this.logger.error('Error reading private key file:', error);
+                const err = createHTTPError(500, 'Private key not found');
+                next(err);
+                return;
+            }
+            const payload: JwtPayload = {
+                sub: String(user.id),
+                role: user.role,
+            };
+            const accessToken = sign(payload, privateKeyPath, {
+                algorithm: 'RS256',
+                expiresIn: '1h',
+                issuer: 'auth-service',
+            });
+            const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
+                algorithm: 'HS256',
+                expiresIn: '1y',
+                issuer: 'auth-service',
+            });
 
             res.cookie('accessToken', accessToken, {
+                domain: 'localhost',
                 httpOnly: true,
-                secure: false,
+                sameSite: 'strict',
+                maxAge: 60 * 60 * 1000, // 1 hour
             });
-            res.cookie('refreshToken', user.refreshToken, {
+
+            res.cookie('refreshToken', refreshToken, {
+                domain: 'localhost',
                 httpOnly: true,
-                secure: false,
+                sameSite: 'strict',
+                maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
             });
 
             res.status(201).json({

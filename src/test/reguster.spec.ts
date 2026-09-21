@@ -201,7 +201,7 @@ describe('POST /auth/register', () => {
             expect(accessTokenCookie).not.toBeNull();
             expect(refreshTokenCookie).not.toBeNull();
             expect(isJWT(accessTokenCookie)).toBeTruthy();
-            // expect(isJWT(refreshTokenCookie)).toBeTruthy();
+            expect(isJWT(refreshTokenCookie)).toBeTruthy();
         });
     });
 });
