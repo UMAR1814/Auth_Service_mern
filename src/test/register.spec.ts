@@ -203,5 +203,28 @@ describe('POST /auth/register', () => {
             expect(isJWT(accessTokenCookie)).toBeTruthy();
             expect(isJWT(refreshTokenCookie)).toBeTruthy();
         });
+
+        it('should store the refresh token in the database', async () => {
+            const user = {
+                username: 'testuser',
+                email: 'testuser@example.com',
+                password: 'password123',
+            };
+
+            const response = await request(app)
+                .post('/auth/register')
+                .send(user);
+            const refreshTokenRepository =
+                connection.getRepository('RefreshToken');
+            // const refreshTokens = await refreshTokenRepository.find();
+            // expect(refreshTokens.length).toBe(1);
+            const token = await refreshTokenRepository
+                .createQueryBuilder('refreshToken')
+                .where('refreshToken.userId = :userId', {
+                    userId: (response.body as Record<string, string>).id,
+                })
+                .getMany();
+            expect(token.length).toBe(1);
+        });
     });
 });

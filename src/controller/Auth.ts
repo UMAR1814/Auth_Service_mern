@@ -9,6 +9,8 @@ import { validationResult } from 'express-validator';
 import path from 'path';
 import { Config } from '../config';
 import createHTTPError from 'http-errors';
+import { AppDataSource } from '../config/data-source';
+import { RefreshToken } from '../entities/RefreshToken';
 
 export class AuthController {
     userServices: UserServices;
@@ -61,10 +63,19 @@ export class AuthController {
                 expiresIn: '1h',
                 issuer: 'auth-service',
             });
+
+            const MS_IN_A_YEAR = 365 * 24 * 60 * 60 * 1000;
+            const refreshTokenRepository =
+                AppDataSource.getRepository(RefreshToken);
+            const newRefreshToken = await refreshTokenRepository.save({
+                user: user,
+                expiresAt: new Date(Date.now() + MS_IN_A_YEAR),
+            });
             const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
                 algorithm: 'HS256',
                 expiresIn: '1y',
                 issuer: 'auth-service',
+                jwtid: String(newRefreshToken.id),
             });
 
             res.cookie('accessToken', accessToken, {
